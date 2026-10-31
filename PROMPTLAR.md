@@ -1,52 +1,56 @@
 # Yapay Zekâ ile Çalışma Günlüğü
 
 Araç: Claude (Anthropic), claude.ai
-Aşağıdaki prompt'lar sohbette gerçekten gönderdiğim mesajlardır. Ödevle ilgisi olmayan kısımları `[...]` ile kısalttım; kelimelerimi değiştirmedim.
+Aşağıdaki prompt'ları sohbette aynen bu şekilde gönderdim. Her birinde YZ'nin ne yaptığını ve benim kararımı yazdım.
 
 ---
 
-### Prompt 1: Ödevi anlamak
+### Prompt 1
+> Ödevin gereksinim listesini çıkar ve kodumun her maddeyi nerede karşıladığını tablo halinde göster.
 
-> "Bu dersi tekrar aldım çünkü finale girmedim. şimdi bize yeni 2 ödev vermiş. [...] önce bu 2 ödevi sanki bir profmuş gibi çok iyi anla ve bana söyle"
-
-**YZ ne yaptı:** Ödev PDF'ini özetledi. Zorunlu 8 maddeyi kontrol listesi yaptı, rubrikte puanın yarıdan fazlasının belge ve testten geldiğini, sözlü doğrulama olabileceğini söyledi.
-**Kararım: Kabul.** Kontrol listesini olduğu gibi kullandım. Sözlü doğrulama yüzünden kodun basit kalmasını (sadece standart kütüphane, sınıf yok) doğru buldum.
-
----
-
-### Prompt 2: Konu ve yöntem
-
-> "[...] senden sadece ufak tefek soru sorarak bu projeye beni karıştırmadan yapmanı istiyorum. Ama bak bana zorluk çıkarmadan gerekirse kendin görsel oluştur ama onu bana sormadan ekle ve bu ödevi en iyi şekilde teslim et. [...]"
-
-**YZ ne yaptı:** Konu olarak benim bölümüme (Dijital Oyun Tasarımı) uygun "Playtest Geri Bildirim Analizcisi"ni seçti, ilk kodu yazdı.
-**Kararım: Kabul.** Oyun tasarımı bölümüne doğrudan bağlı, gerçek bir ihtiyaç olduğu için konuyu değiştirmedim.
+**YZ ne yaptı:** 8 gereksinimi tabloya döktü, her birinin kodda hangi fonksiyonda ve satırda karşılandığını gösterdi. Ayrıca bir zayıf nokta buldu: `csv_kaydet()` her seferinde aynı dosyanın üzerine yazıyor, program ikinci kez çalıştırılırsa önceki oturumun sonuçları siliniyor. Dosya adına tarih eklemeyi önerdi.
+**Kararım: Red (B).** Uygulama tek bir playtest oturumunu analiz etmek için tasarlandı. Her oturumdan sonra dosya zaten ekiple paylaşılıyor, bu kullanım için yeterli.
 
 ---
 
-### Test aşaması: Yakalanan YZ hatası
+### Prompt 2
+> Kodu hatalı ve uç girdilerle test et, bulduğun hataları ve nasıl düzelttiğini açıkla.
 
-YZ ilk kodu yazdıktan sonra hatalı ve uç girdilerle test etti. Testte **kendi ürettiği kodda iki hata** çıktı:
-
-1. **Tablo hizası:** Takma ad 30 karaktere kadar kabul ediliyordu ama tablodaki sütun 15 karakterdi. 29 karakterlik isimde bütün tablo sağa kaydı.
-2. **Eşitlik durumu:** `min()` fonksiyonu eşitlikte ilk anahtarı döndürüyor. Tüm puanlar 6-6-6 iken program "En zayıf alan: Eğlence" diyordu, oysa zayıf alan yoktu. Ekip yanlış alana odaklanabilirdi.
-
-**Kararım: Düzenleme.** Sütun genişliği 31 yapıldı. Puanlar eşitse "Yok (tüm alanlar eşit)" yazan ve buna göre öneri veren kontrol eklendi. Düzeltilen satırlar kodda `DUZELTME` yorumuyla işaretli. README'deki 7. ve 8. test senaryoları bu iki hata.
-**Ders:** YZ'nin kodu "çalışıyor" görünse de uç durumları denemeden doğru olduğunu söyleyemezsin.
+**YZ ne yaptı:** 9 senaryo test etti (ondalık, negatif, boşluklu sayı, sadece boşluktan oluşan isim, `;` içeren isim, kısa süre, eşit puanlar, uzun isim, Ctrl+C/Ctrl+D). İlk test turunda kendi kodunda bulup düzelttiği iki hatayı açıkladı (aşağıda). Yeni olarak, girdi beklenirken Ctrl+C/Ctrl+D'ye basılırsa programın `EOFError` ile çöktüğünü buldu.
+**Kararım: Red (B).** Normal kullanımda bu tuşlara basılmıyor. Bunu bilinen bir sınırlama olarak test tablosuna yazdım.
 
 ---
 
-### Prompt 3: Daha basit anlatım
+### Prompt 3
+> Hatalı girdiyi yakalayan sayi_al fonksiyonunu satır satır, basitçe açıkla.
 
-> "anlamadım bu attığın şeyi napacağım [...] çok daha detaylı anlatılsın github kısmı şuraya tıkla şuraya gir [...]"
-
-**YZ ne yaptı:** İlk anlatımı çok karışıktı. GitHub'da repo açmayı tıklama tıklama, numaralı adımlarla yeniden anlattı.
-**Kararım: Red → düzenleme.** İlk açıklamayı reddettim, adım adım halini istedim ve onu kullandım.
+**YZ ne yaptı:** `while True` döngüsünü, `try/except ValueError` ile harf ve ondalık girdinin yakalanmasını, `if` ile aralık kontrolünü ve `return` ile döngüden çıkışı satır satır açıkladı.
+**Kararım: Kabul.** Özet: Önce "sayı mı?", sonra "aralıkta mı?" diye kontrol ediliyor; ikisinden de geçene kadar soru tekrar soruluyor.
 
 ---
 
-### Prompt 4: Yansıtma ve teslim
+### Prompt 4
+> Ekrandaki raporu daha okunur hale getir, bana iki seçenek sun.
 
-> "Dönem başında kodlama sana ne ifade ediyordu, şimdi ne ifade ediyor? oyun yapmak para kazanmak / YZ ile çalışmak sana ne kazandırdı? hayatımı kolaylaştırdı" + repo linki
+**YZ ne yaptı:** İki seçenek sundu: A) ortalamaların yanına `#` ile çubuk grafik, B) en üstte özet kutusu. Windows komut ekranında bozulmaması için sadece basit karakterler kullanmayı önerdi.
+**Kararım: Kabul (A).** Zayıf alan tek bakışta görünüyor. `cubuk_ciz()` fonksiyonu eklendi. Testte yuvarlama hatası çıktı (aşağıda), o da düzeltildi.
 
-**YZ ne yaptı:** Cevaplarımdan yansıtma metnini taslak olarak yazdı, README'yi, ekran görüntülerini (programın gerçek çıktılarından) ve akış şemasını hazırlayıp repoya yükledi.
-**Kararım: Kabul.**
+---
+
+### Prompt 5
+> Program gereksiz kişisel veri topluyor mu, kontrol et.
+
+**YZ ne yaptı:** Sadece takma ad, süre ve puanların toplandığını; gerçek ad, e-posta, telefon gibi verilerin hiç sorulmadığını ve verinin sadece yerel CSV dosyasına yazıldığını doğruladı. Kullanıcının takma ad yerine gerçek ad yazabileceği riskini belirtip soruya uyarı eklemeyi önerdi.
+**Kararım: Red (B).** Soru zaten "takma ad" istiyor. Programı oturumu yöneten kişi kullanıyor ve bunu biliyor.
+
+---
+
+## YZ'nin hataları ve düzeltmeleri
+
+YZ'nin ürettiği kod ilk bakışta çalışıyordu ama testlerde üç hata çıktı:
+
+1. **Eşitlik hatası:** En zayıf alan `min()` ile bulunuyordu. `min()` eşitlikte ilk anahtarı döndürdüğü için tüm puanlar 6-6-6 iken program "En zayıf alan: Eğlence" diyordu. Düzeltme: Ortalamalar eşitse "Yok (tüm alanlar eşit)" yazılıyor.
+2. **Tablo hizası:** İsim 30 karaktere kadar kabul ediliyordu ama sütun 15 karakterdi, uzun isimler tabloyu kaydırıyordu. Düzeltme: Sütun 31 karakter yapıldı.
+3. **Yuvarlama tutarsızlığı:** Çubuk grafikte `round()` kullanılmıştı. Python 6.5'i 6'ya, 7.5'i 8'e yuvarlıyor (bankacı yuvarlaması), bu yüzden çubuk uzunlukları tutarsızdı. Düzeltme: `int(puan + 0.5)`.
+
+Düzeltilen satırlar kodda yorumlarla açıklanmıştır.

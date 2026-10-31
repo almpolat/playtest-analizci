@@ -68,13 +68,16 @@ Menüden seçim yapın:
 | # | Girdi | Beklenen | Gerçek | Sonuç |
 |---|---|---|---|---|
 | 1 | 3 oyuncu, geçerli puanlar → Rapor | Ortalamalar ve en zayıf alan doğru | Eğlence 7.7, Zorluk 5.0, Kontroller 6.7; en zayıf: Zorluk dengesi | ✅ |
-| 2 | Süreye `abc` | "Lütfen bir tam sayı girin", tekrar sorar | Aynı | ✅ |
-| 3 | Puana `11`, süreye `0` | Aralık uyarısı, tekrar sorar | Aynı | ✅ |
-| 4 | Takma ada boş giriş | "Boş bırakılamaz" uyarısı | Aynı | ✅ |
+| 2 | Süreye `abc` / `7.5` | "Lütfen bir tam sayı girin", tekrar sorar | Aynı | ✅ |
+| 3 | Puana `11`, süreye `0` / `-3` | Aralık uyarısı, tekrar sorar | Aynı | ✅ |
+| 4 | Takma ada boş giriş / sadece boşluk | "Boş bırakılamaz" uyarısı | Aynı | ✅ |
 | 5 | Hiç kayıt yokken 2 ve 3 | Çökmez, "Henüz kayıt yok" | Aynı | ✅ |
 | 6 | Menüde `5` | "Geçersiz seçim" | Aynı | ✅ |
-| 7 | 29 karakterlik takma ad | Tablo hizası bozulmaz | İlk sürümde bozuldu → düzeltildi | ✅ (düzeltme sonrası) |
-| 8 | Tüm puanlar eşit (6-6-6) | "En zayıf alan yok" | İlk sürümde yanlışlıkla "Eğlence" → düzeltildi | ✅ (düzeltme sonrası) |
+| 7 | İsimde `;` (`Ali;Veli`) | CSV sütunları kaymaz | Tırnak içinde yazıldı, sütunlar doğru | ✅ |
+| 8 | 29 karakterlik takma ad | Tablo hizası bozulmaz | İlk sürümde bozuldu → düzeltildi | ✅ |
+| 9 | Tüm puanlar eşit (6-6-6) | "En zayıf alan yok" | İlk sürümde "Eğlence" → düzeltildi | ✅ |
+| 10 | Ortalama 6.5 ve 7.5 | Çubuklar tutarlı yuvarlanır | İlk sürümde 6 ve 8 → düzeltildi | ✅ |
+| 11 | Girdi beklenirken Ctrl+C / Ctrl+D | Düzgün kapanma | `EOFError` ile çıkıyor | ⚠️ Bilinen sınırlama |
 
 ## Dosyalar
 
