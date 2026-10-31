@@ -91,6 +91,12 @@ def puan_yorumu(puan):
         return "Oncelikli sorun"
 
 
+def cubuk_ciz(puan):
+    """Puani 10 karakterlik bir cubuga cevirir. Ornek: 7.7 -> ########--"""
+    dolu = round(puan)
+    return "#" * dolu + "-" * (10 - dolu)
+
+
 def oneri_uret(en_zayif, ort_sure):
     """En zayif alana ve oynama suresine gore ekibe oneri yazar."""
     if en_zayif is None:
@@ -123,7 +129,7 @@ def rapor_yazdir(kayitlar):
     ortalamalar, ort_sure, en_zayif = ozet_hesapla(kayitlar)
     for anahtar, ad in ALANLAR.items():
         puan = ortalamalar[anahtar]
-        print(f"{ad:<18}: {puan:>4} / 10  -> {puan_yorumu(puan)}")
+        print(f"{ad:<18}: {puan:>4} / 10  {cubuk_ciz(puan)}  {puan_yorumu(puan)}")
     print(f"{'Ortalama sure':<18}: {ort_sure} dk")
     print(f"En zayif alan     : {zayif_alan_adi(en_zayif)}")
     print(f"Oneri             : {oneri_uret(en_zayif, ort_sure)}")

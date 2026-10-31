@@ -59,7 +59,7 @@ Menüden seçim yapın:
 | 3+ girdi ve doğrulama | `metin_al()`, `sayi_al()`: `try/except` ve aralık kontrolü |
 | 2+ karar yapısı | `puan_yorumu()`, `oneri_uret()`, `ana_menu()` içindeki `if/elif/else` |
 | Döngü | `ana_menu()` içindeki `while True` menü döngüsü, girdi tekrar döngüleri |
-| 3+ fonksiyon | 10 fonksiyon |
+| 3+ fonksiyon | 11 fonksiyon |
 | Liste / sözlük | `kayitlar` listesi, her kayıt bir sözlük; `ALANLAR` sözlüğü |
 | Dosyaya kayıt | `csv_kaydet()`: `playtest_sonuclari.csv` |
 
