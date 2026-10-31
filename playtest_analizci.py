@@ -93,7 +93,9 @@ def puan_yorumu(puan):
 
 def cubuk_ciz(puan):
     """Puani 10 karakterlik bir cubuga cevirir. Ornek: 7.7 -> ########--"""
-    dolu = round(puan)
+    # round() 6.5 -> 6 ama 7.5 -> 8 yapiyor (bankaci yuvarlamasi);
+    # her zaman yukari yuvarlamak icin int(puan + 0.5) kullaniyoruz.
+    dolu = int(puan + 0.5)
     return "#" * dolu + "-" * (10 - dolu)
 
 
